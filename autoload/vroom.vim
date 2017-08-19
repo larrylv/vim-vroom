@@ -150,7 +150,7 @@ endfunction
 " next time the function is called in a non-test file, it runs the last test
 function s:RunTestFile(args)
   " Run the tests for the previously-marked file.
-  let in_test_file = match(expand("%"), '\(\/test_.*\.rb\)\|\(\.feature\|_spec\.rb\|_test\.exs\|_test\.rb\|_spec\.js.*\)$') != -1
+  let in_test_file = match(@%, '\(test\/.*\.rb\)\|\(\/test_.*\.rb\)\|\(\.feature\|_spec\.rb\|_test\.exs\|_test\.rb\|_spec\.js.*\)$') != -1
 
   if in_test_file && s:IsNeoTerminal() == 0
     call s:SetTestFile()
@@ -164,7 +164,7 @@ endfunction
 " Internal: Runs the current or last test with the currently selected line
 " number
 function s:RunNearestTest(args)
-  let in_test_file = match(expand("%"), '\(\.feature\|_spec\.rb\|_test\.exs\|_test\.rb\|_spec\.js.*\)$') != -1
+  let in_test_file = match(@%, '\(test\/.*\.rb\)\|\(\/test_.*\.rb\)\|\(\.feature\|_spec\.rb\|_test\.exs\|_test\.rb\|_spec\.js.*\)$') != -1
 
   if in_test_file
     call s:SetNearestTest()
@@ -214,6 +214,8 @@ function s:DetermineRunner(filename)
   elseif match(a:filename, '\/test_.*\.rb$') != -1
     return s:test_runner_prefix . g:vroom_test_unit_command
   elseif match(a:filename, '_test\.rb$') != -1
+    return s:test_runner_prefix . g:vroom_test_unit_command
+  elseif match(a:filename, 'test\/.*\.rb$') != -1
     return s:test_runner_prefix . g:vroom_test_unit_command
   elseif match(a:filename, '_test\.exs$') != -1
     return g:vroom_mix_test_command . s:color_flag
