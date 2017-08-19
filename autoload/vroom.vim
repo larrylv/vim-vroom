@@ -172,7 +172,11 @@ function s:RunNearestTest(args)
     return
   end
 
-  let test_line = ':' . t:vroom_nearest_test
+  if match(in_test_file, '_spec\.rb$') != -1
+    let test_line = ':' . t:vroom_nearest_test
+  else
+    let test_line = ' -l ' . t:vroom_nearest_test
+  end
   let updated_args = s:Merge(a:args, {'line':test_line})
 
   call s:RunTestFile(updated_args)
